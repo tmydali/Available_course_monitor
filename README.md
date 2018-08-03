@@ -1,1 +1,1 @@
-# Avalible_course_monitor
+# Available_course_monitor
