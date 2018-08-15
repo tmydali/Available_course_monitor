@@ -4,19 +4,15 @@ from .websiteParser import Course_list
 from . import sender
 
 
-def multithrd(DeptNo, CrsNo, dept, userID):
-	conn = sqlite3.connect('user_data.db')
+def multithrd(userID, DeptNo, CrsNo, dept):
 	t = thrd.Thread(target = checkCourse, args = (
-		userID, DeptNo, CrsNo, dept, conn))
-	c = conn.cursor()
-	c.execute("""INSERT INTO users
-		VALUES(?, ?, ?, ?, ?, ?)""", (userID, None, DeptNo, CrsNo, t, None))
-	conn.commit()
+		userID, DeptNo, CrsNo, dept))
+	#write_database("""INSERT INTO users VALUES(?, ?, ?, ?, ?, ?)""",
+	#	(userID, None, DeptNo, CrsNo, None, None))
 	t.start()
 
 
-def checkCourse(userID, DeptNo, CrsNo, dept, conn):
-	c = conn.cursor()
+def checkCourse(userID, DeptNo, CrsNo, dept):
 	# set up a loop and wait for several seconds between each turn
 	try:
 		while True:
@@ -35,13 +31,13 @@ def checkCourse(userID, DeptNo, CrsNo, dept, conn):
 					userID,
 					"{0:s} {1:s} {2:s}\n now is available!".format(
 						DeptNo,CrsNo,CrsName))
-				c.executescript("""
-					UPDATE users
-					SET CourseName = ?, stopped = True
-					WHERE ? AND ? AND ?
-					""", (CrsName, userID, DeptNo, CrsNo))
-				conn.commit()
-				conn.close()
+				#write_database(
+				#	"""
+				#	UPDATE users
+				#	SET CourseName = ?, stopped = True
+				#	WHERE ? AND ? AND ?
+				#	""", 
+				#	(CrsName, userID, DeptNo, CrsNo))
 				print("{0:s} is available!".format(CrsName))
 				break
 
@@ -56,7 +52,15 @@ def checkCourse(userID, DeptNo, CrsNo, dept, conn):
 		print("Course not found!\n")
 		
 		
-"""		
+		
+"""	
+def  write_database(command, data):
+	conn = sqlite3.connect('user_data.db')
+	c = conn.cursor()
+	c.execute(command, data)
+	conn.commit()
+	conn.close()
+			
 def remove_dead_threads():
     global threads
     threads = {key : t for key, t in threads.items() if t.is_alive()}

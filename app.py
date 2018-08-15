@@ -40,13 +40,18 @@ def handle_message(event):
 	to = event.source.user_id
 	try:
 		usr_DeptNo, usr_CrsNo = event.message.text.split()
-		monitor.multithrd(usr_DeptNo, usr_CrsNo, dept, to)
-	except:
+		monitor.multithrd(to, usr_DeptNo, usr_CrsNo, dept)
+	except ValueError:
 		print("Format error!\n")
 		text = "Format error!"
 		sender.message_sender(to, text)
 		raise
-    
+	except:
+		print("System error!\n")
+		text = "System error!"
+		sender.message_sender(to, text)
+		raise
+		
 	print(event.source.user_id)
 	print(event.message.text)
 	
