@@ -13,6 +13,7 @@ def multithrd(userID, DeptNo, CrsNo, dept):
 
 
 def checkCourse(userID, DeptNo, CrsNo, dept):
+	is_1st_round = True
 	# set up a loop and wait for several seconds between each turn
 	try:
 		while True:
@@ -31,19 +32,18 @@ def checkCourse(userID, DeptNo, CrsNo, dept):
 					userID,
 					"{0:s} {1:s} {2:s}\n now is available!".format(
 						DeptNo,CrsNo,CrsName))
-				#write_database(
-				#	"""
-				#	UPDATE users
-				#	SET CourseName = ?, stopped = True
-				#	WHERE ? AND ? AND ?
-				#	""", 
-				#	(CrsName, userID, DeptNo, CrsNo))
 				print("{0:s} is available!".format(CrsName))
 				break
-
-				
-			#print("{0:s}，餘額: {1:s}".format(CrsName, CrsSpace))
+			elif is_1st_round == True and CrsSpace < 10:
+				sender.message_sender(
+					userID,
+					"{0:s} {1:s} {2:s}\n almost out of space!".format(
+						DeptNo,CrsNo,CrsName))
+				print("{0:s} is almost out of space!".format(CrsName))
+			
+			is_1st_round = False
 			time.sleep(2)
+			
 	except KeyError:
 		sender.message_sender(
 			userID,
