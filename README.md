@@ -17,6 +17,7 @@
   - 尚無機制記錄使用者的使用狀況
   
 ## 內容
+### /
 #### Pipfile
 專案所處的虛擬環境中，需要使用的package (用pipenv打包)
 
@@ -31,13 +32,33 @@
 使用flask建立的框架，主要差別在機器人回復訊息時必須使用push物件，而非示範程式中的reply
 LineBot針對python的文件：https://github.com/line/line-bot-sdk-python
 需先至Line Developers 申請企業帳號，得到兩組密鑰後填入程式中指定位置，以環境變數的方式較為安全
-- handle_message(event)
++ handle_message(event)
   篩選使用者輸入的訊息是否符合格式，符合則將訊息傳入monitor模組
   
-### CourseMonitor
-#### __init__
-#### monitor
+### /CourseMonitor
+#### \_\_init\_\_.py
+#### websiteParser.py
++ get_site(url)
+  - *url*：待解析的html網址
+  模組使用BeautifulSoup4
++ Department_list()
+  解析成大課程查詢首頁後，將系所代碼及其對應的課程網址存入字典，形式為{系所代碼 : 網址}，回傳字典
++ Course_list(DeptNo, dept_dict)
+  - *DeptNo*：系所代碼，由event.message.text取得
+  - *dept_dict*：系所代碼與其對應網址，由Department_list()取得
+  
+  解析指定系所的課程網站，最後以{課程代碼 : [課程中文名稱, 課程餘額]}字典的形式儲存，回傳字典
+#### sender.py
+
+#### monitor.py
 監控課程的主要程式，由單機版crawler.ipynb衍生而來
-#### sender
-#### websiteParser
++ multithrd(userID, DeptNo, CrsNo, dept)
+  - *userID*：使用者專用ID，由U開頭的33碼組成，藉由webhook取得的event.sourse.user_id取得
+  - *DeptNo*：系所代碼，由event.message.text取得
+  - *CrsNo* ：科目代碼，由event.message.text取得
+  - *dept*  ：所有系所課程列表的網址，由websiteParser.py中的Department_list()取得，每一次接收到訊息後新建一個執行續，來獨立執行checkCourse()
++ checkCourse(userID, DeptNo, CrsNo, dept)
+  - *參數同上*
+  
+  呼叫Course_list()來取出所指定的系所課程清單，首先查詢所指定的課程代碼是否存在，不存在則呼叫sender()傳回訊息提醒使用者重新輸入，存在則進入判斷，課程若有餘額則傳回有餘額的訊息，沒有則傳回無餘額的訊息，並且固定時間抓資料，直到有餘額為止
     
