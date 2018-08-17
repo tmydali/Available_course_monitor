@@ -55,7 +55,7 @@ LineBot針對python的文件：https://github.com/line/line-bot-sdk-python
   - *to*：傳訊對象ID，由`event.sourse.user_id`取得
   - *text*：欲傳送的訊息
   
-  示範程式中使用reply()方法，但此方法必須在收到訊息後數秒內回覆，故無法滿足監控需求，改用push()方法
+  示範程式中使用`reply()`方法，但此方法必須在收到訊息後數秒內回覆，故無法滿足監控需求，改用`push()`方法
 #### monitor.py
 監控課程的主要程式，由單機版crawler.ipynb衍生而來
 + multithrd(userID, DeptNo, CrsNo, dept)
