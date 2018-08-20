@@ -14,7 +14,7 @@
 + 待改進的部分
   - 使用者無法反悔已監控的課程
   - webhook伺服器偶爾會無回應而timeout
-  - 尚無機制記錄使用者的使用狀況
+  - ~~尚無機制記錄使用者的使用狀況~~
   
 ## 內容
 ### /
@@ -72,4 +72,4 @@ LineBot針對python的文件：https://github.com/line/line-bot-sdk-python
   - *command*：SQL指令
   - *data*：待存入的變數資料
   
-使用heroku本身提供的postgres資料庫，當`checkCourse()`確定課程存在後呼叫此函數，將事件存入
+  使用heroku本身提供的postgres資料庫，當`checkCourse()`確定課程存在後呼叫此函數，將事件存入
