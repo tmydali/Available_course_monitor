@@ -12,9 +12,9 @@ from linebot.models import (
 import os, sqlite3
 from CourseMonitor import (websiteParser, monitor, sender)
 
+
 app = Flask(__name__)
 dept = websiteParser.Department_list()
-
 handler = WebhookHandler(os.environ["CHANNEL_SECRET"])
 
 @app.route("/callback", methods=['POST'])
@@ -39,31 +39,20 @@ def callback():
 def handle_message(event):
 	to = event.source.user_id
 	try:
+		#check if the message from user matches the format
 		usr_DeptNo, usr_CrsNo = event.message.text.split()
 		monitor.multithrd(to, usr_DeptNo, usr_CrsNo, dept)
 	except ValueError:
-		print("Format error!\n")
-		text = "Format error!"
+		print("Format error!")
+		text = "格式錯誤！\n系所和科目代碼間記得空格"
 		sender.message_sender(to, text)
-		raise
 	except:
 		print("System error!\n")
-		text = "System error!"
+		text = "系統錯誤\n哇，GG"
 		sender.message_sender(to, text)
 		raise
 		
-	print(event.source.user_id)
-	print(event.message.text)
-	
-
-'''	
-def message_sender(to, text):
-	line_bot_api.push_message(
-			to, 
-			TextSendMessage(text))
-'''
-
-    
+   
 if __name__ == "__main__":
     app.run(port=os.environ["PORT"])
 	
