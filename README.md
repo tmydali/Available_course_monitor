@@ -67,4 +67,9 @@ LineBot針對python的文件：https://github.com/line/line-bot-sdk-python
   - *參數同上*
   
   呼叫`Course_list()`來取出所指定的系所課程清單，首先查詢所指定的課程代碼是否存在，不存在則呼叫`sender()`傳回訊息提醒使用者重新輸入，存在則進入判斷，課程若有餘額則傳回有餘額的訊息，沒有則傳回無餘額的訊息，並且固定時間抓資料，直到有餘額為止
-    
+  
++ write_database(command, data)
+  - *command*：SQL指令
+  - *data*：待存入的變數資料
+  
+使用heroku本身提供的postgres資料庫，當`checkCourse()`確定課程存在後呼叫此函數，將事件存入
